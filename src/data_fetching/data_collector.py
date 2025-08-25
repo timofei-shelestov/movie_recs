@@ -1,7 +1,7 @@
 import asyncio
 
 import json
-from .tmdb_fetcher import fetch_pages_async
+from src.data_fetching.tmdb_fetcher import fetch_pages_async
 
 async def collect_movies(pages):
   res = await fetch_pages_async(pages) 
@@ -24,7 +24,8 @@ def remove_unnecessary_attributes(raw_data):
         "title": movie["title"],
         "genre_ids": movie["genre_ids"],
         "vote_average": movie["vote_average"],
-        "vote_count": movie["vote_count"]
+        "vote_count": movie["vote_count"],
+        "release_date": movie["release_date"]
     }
     for movie in raw_data
   ]
