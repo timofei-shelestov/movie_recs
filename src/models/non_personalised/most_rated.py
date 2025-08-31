@@ -15,7 +15,7 @@ def get_most_voted(all_movies, amount_of_movies):
   return list(most_rated)
 
 
-with open('data/movies.json') as f:
+with open("data/movies.json") as f:
     d = json.load(f)
 
 most_rated = get_most_voted(d, 100)

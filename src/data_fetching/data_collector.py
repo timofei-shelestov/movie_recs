@@ -13,6 +13,7 @@ async def collect_movies(pages):
   save_data(raw_data, "raw_data")
 
   movies = remove_unnecessary_attributes(raw_data)
+  movies = remove_if_empty_date(movies)
   cleaned_movies = remove_duplicates(movies)
   save_data(cleaned_movies, "movies")
 
@@ -42,6 +43,12 @@ def remove_duplicates(data):
 
   return unique_list    
 
+
+def remove_if_empty_date(movies):
+  for movie in movies:
+    if movie["release_date"] == "":
+      movies.remove(movie)
+  return movies
 
 def save_data(data, filename):
   with open(f"data/{filename}.json", "w") as f:
