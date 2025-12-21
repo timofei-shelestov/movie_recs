@@ -1,5 +1,6 @@
 import json
 from src.data_fetching import data_collector
+from src.utils import plot
 
 def get_most_voted(all_movies, amount_of_movies): 
   max_vote_average = max(movie["vote_average"] for movie in all_movies)
@@ -21,3 +22,5 @@ with open("data/movies.json") as f:
 most_rated = get_most_voted(d, 100)
 
 data_collector.save_data(most_rated, "most_rated")
+
+plot.bar(list(map(lambda movie : int(movie["vote_average"])), list(most_rated)), 10, list(map(lambda movie : movie["title"], list(most_rated))), "Most Rated")
