@@ -16,24 +16,3 @@ class Genre(Model):
   title = fields.CharField(max_length=255, db_index=True)
   movies: fields.ManyToManyRelation[Movie]
 
-
-async def run():
-  await Tortoise.init(db_url="sqlite://movies_db.sqlite3", modules={"models": ["__main__"]})
-  await Tortoise.generate_schemas() 
-
-
-def patch_aiosqlite_for_tortoise():
-    import aiosqlite
-    if hasattr(aiosqlite.Connection, "start"):
-        return
-    def start(self):
-        if not self._thread.is_alive():
-            self._thread.start()
-    aiosqlite.Connection.start = start
-
-
-if __name__ == "__main__": 
-  patch_aiosqlite_for_tortoise()
-  run_async(run())
-
-  print(run_async(Movie.all()))
