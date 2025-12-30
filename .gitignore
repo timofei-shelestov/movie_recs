@@ -5,3 +5,5 @@ data/
 TODO.md
 *.sqlite3-*
 *.sqlite3
+
+db_query_sample.sql

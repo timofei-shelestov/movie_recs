@@ -11,16 +11,25 @@ class Movie(Model):
   vote_count = fields.IntField()
   release_date = fields.DatetimeField()
 
+  class Meta:
+    table = "movies"
+
 
 class Genre(Model):
   title = fields.CharField(max_length=255, db_index=True)
   movies: fields.ManyToManyRelation[Movie]
+
+  class Meta:
+    table = "genres"
 
 
 class User(Model):
   name = fields.CharField(max_length=100)
   age = fields.IntField(null=True)
   created_at = fields.DatetimeField(auto_now_add=True)
+
+  class Meta:
+    table = "users"
 
 
 class UserRating(Model):
