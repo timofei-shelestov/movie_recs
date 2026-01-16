@@ -25,6 +25,6 @@ async def fetch_pages_async(pages):
   async with aiohttp.ClientSession() as session:
     tasks = [fetch_single_page(session, page) for page in range(1, pages + 1)]
     results = await asyncio.gather(*tasks)
-    if tasks != None:
+    if tasks is not None:
       return results
     return None

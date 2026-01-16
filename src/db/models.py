@@ -16,11 +16,20 @@ class Movie(Model):
 
 
 class Genre(Model):
-  title = fields.CharField(max_length=255, db_index=True)
+  name = fields.CharField(max_length=255, db_index=True)
   movies: fields.ManyToManyRelation[Movie]
 
   class Meta:
     table = "genres"
+
+
+class MovieGenre(Model):
+  movie_id = fields.IntField(db_index=True)
+  genre_id = fields.IntField(db_index=True)
+
+  class Meta:
+    table = "movie_genre"
+    indexes = ("movie_id", "genre_id")
 
 
 class User(Model):
@@ -35,7 +44,7 @@ class User(Model):
 class UserRating(Model):
   user = fields.ForeignKeyField("models.User", related_name="ratings")
   movie = fields.ForeignKeyField("models.Movie", related_name="ratings")
-  rating = fields.FloatField()  # 1.0 - 5.0
+  rating = fields.FloatField()
   timestamp = fields.DatetimeField(auto_now_add=True)
 
   class Meta:

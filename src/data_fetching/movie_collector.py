@@ -1,6 +1,6 @@
 import asyncio
 import json
-from src.db import db_connection, movie_ops
+from src.db import db_connection, MovieGenre, movie_ops, movie_genre_ops
 from src.data_fetching.tmdb_fetcher import fetch_pages_async
 
 
@@ -17,8 +17,14 @@ async def collect_movies(pages):
 
     movies = remove_unnecessary_attributes(raw_data)
     movies = remove_if_empty_date(movies)
-    cleaned_movies = remove_duplicates(movies)
-    await save_to_db(cleaned_movies)
+    cleaned_movies = await remove_duplicates(movies)
+    movie_genre_pairs = [
+      {"movie_id": movie["id"], "genre_id": genre_id}
+      for movie in raw_data
+      for genre_id in movie["genre_ids"]
+    ]
+
+    await save_to_db(cleaned_movies, movie_genre_pairs)
 
 
 def remove_unnecessary_attributes(raw_data):
@@ -26,7 +32,6 @@ def remove_unnecessary_attributes(raw_data):
     {
       "id": movie["id"],
       "title": movie["title"],
-      "genres": movie["genre_ids"],
       "vote_average": movie["vote_average"],
       "vote_count": movie["vote_count"],
       "release_date": movie["release_date"],
@@ -37,12 +42,14 @@ def remove_unnecessary_attributes(raw_data):
   return movies
 
 
-def remove_duplicates(data):
+async def remove_duplicates(data):
   unique_list = []
+  unique_ids = list(map(lambda x: x.id, await movie_ops.get_all()))
 
   for item in data:
-    if item not in unique_list:
+    if item["id"] not in unique_ids:
       unique_list.append(item)
+      unique_ids.append(item["id"])
 
   return unique_list
 
@@ -53,11 +60,14 @@ def remove_if_empty_date(movies):
 
 def save_to_json(data, filename):
   with open(f"data/{filename}", "w") as f:
-    json.dump(data, f, indent=4)
+    json.dump(data, f, indent=2)
 
 
-async def save_to_db(movies):
-  return await movie_ops.bulk_create(movies)
+async def save_to_db(movies, movies_genre):
+  res = await movie_ops.bulk_create(movies)
+  await movie_genre_ops.bulk_create(movies_genre)
+
+  return res
 
 
 if __name__ == "__main__":

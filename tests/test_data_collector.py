@@ -1,7 +1,7 @@
 import pytest
 import json
 from unittest.mock import patch, mock_open, AsyncMock
-from src.data_fetching.data_collector import (
+from src.data_fetching.movie_collector import (
   collect_movies,
   remove_unnecessary_attributes,
   remove_duplicates,
@@ -50,9 +50,9 @@ async def test_collect_movies():
   ]
 
   with patch(
-    "src.data_fetching.data_collector.fetch_pages_async", new_callable=AsyncMock
+    "src.data_fetching.movie_collector.fetch_pages_async", new_callable=AsyncMock
   ) as mock_fetch:
-    with patch("src.data_fetching.data_collector.save_data") as mock_save:
+    with patch("src.data_fetching.movie_collector.save_data") as mock_save:
       mock_fetch.return_value = mock_pages_response
 
       await collect_movies([1, 2])

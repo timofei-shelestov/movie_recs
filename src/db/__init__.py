@@ -1,13 +1,15 @@
-from .models import Movie, Genre, User, UserRating
+from .models import Movie, Genre, User, UserRating, MovieGenre
 from .config import db_connection
-from .operations import MovieOperations, movie_ops
+from .operations import movie_ops, genre_ops, movie_genre_ops
 
 __all__ = [
   "Movie",
   "Genre",
   "User",
   "UserRating",
+  "MovieGenre",
   "db_connection",
-  "MovieOperations",
   "movie_ops",
+  "genre_ops",
+  "movie_genre_ops",
 ]
