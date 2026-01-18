@@ -1,11 +1,15 @@
 import asyncio
 import json
-from src.db import db_connection, MovieGenre, movie_ops, movie_genre_ops
+from src.db import db_connection, movie_ops, movie_genre_ops, genre_ops
 from src.data_fetching.tmdb_fetcher import fetch_pages_async
 
 
 async def collect_movies(pages):
   async with db_connection():
+    if await genre_ops.get_count() <= 0:
+      print("ERROR: please fetch genres before fething movies")
+      return False
+
     res = await fetch_pages_async(pages)
     raw_data = []
 

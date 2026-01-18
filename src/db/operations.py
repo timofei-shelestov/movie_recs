@@ -1,4 +1,5 @@
 from src.db import Movie, Genre, MovieGenre
+from tortoise.functions import Count
 
 
 class MovieOperations:
@@ -39,6 +40,9 @@ class GenreOperations:
 
   async def bulk_create(self, genres):
     return await Genre.bulk_create([Genre(**g) for g in genres])
+
+  async def get_count(self):
+    return await Genre.all().count()
 
 
 genre_ops = GenreOperations()
