@@ -1,5 +1,10 @@
 from src.db import operations
 import asyncio
+from recommendations import BaseRecommender
+
+
+class PopularityRecommender(BaseRecommender):
+  pass
 
 
 def popularity(movie: dict, n=10):
