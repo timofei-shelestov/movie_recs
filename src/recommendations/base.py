@@ -9,5 +9,9 @@ class BaseRecommender(ABC):
     self.movies = movies
 
   @abstractmethod
-  def get_recommendations():
+  def score_movie(self, movie):
+    pass
+
+  @abstractmethod
+  def get_recommendation(self, movies, n):
     pass

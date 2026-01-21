@@ -1,17 +1,20 @@
-from src.db import operations
-import asyncio
 from recommendations import BaseRecommender
 
 
 class PopularityRecommender(BaseRecommender):
-  pass
+  ## weighted rating using Bayesian estimation. Source: https://fulmicoton.com/posts/bayesian_rating/
 
+  def __init__(self, movies):
+    super().__init__(movies)
 
-def popularity(movie: dict, n=10):
-  return (movie.vote_count / (movie.vote_count + 10) * movie.vote_average) + (
-    10 / (movie.vote_count + 10) / 6.8
-  )
+  def score_movie(self, movie):
+    C = 5
+    m = movie["vote_average"]
+    vote_sum = movie["vote_count"] * movie["vote_average"]
 
+    return (C * m + vote_sum) / (C + movie["vote_count"])
 
-if __name__ == "__main__":
-  movies = asyncio.run(operations.movie_ops.get_by_id())
+  def get_recommendation(self):
+    scored = [(movie["id"], self.score_movie(movie)) for movie in self.movies]
+
+    return scored
