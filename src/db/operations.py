@@ -1,5 +1,6 @@
 from src.db import Movie, Genre, MovieGenre
 from tortoise.functions import Count
+from tortoise import Tortoise
 
 
 class MovieOperations:
@@ -10,7 +11,10 @@ class MovieOperations:
     return await Movie.bulk_create([Movie(**m) for m in movies])
 
   async def get_all(self):
-    return await Movie.all()
+    conn = Tortoise.get_connection("default")
+    return await conn.execute_query_dict(
+      "SELECT movie_id AS id, title, vote_average, vote_count, release_date, GROUP_CONCAT(genre_id) AS genre_ids FROM movies INNER JOIN movie_genre ON movies.id = movie_genre.movie_id GROUP BY movies.release_date"
+    )
 
   async def get_by_id(self, movie_id):
     return await Movie.filter(id=movie_id).first()
@@ -40,6 +44,9 @@ class GenreOperations:
 
   async def bulk_create(self, genres):
     return await Genre.bulk_create([Genre(**g) for g in genres])
+
+  async def get_all(self):
+    return await Genre.all()
 
   async def get_count(self):
     return await Genre.all().count()
