@@ -38,6 +38,7 @@ def remove_unnecessary_attributes(raw_data):
       "title": movie["title"],
       "vote_average": movie["vote_average"],
       "vote_count": movie["vote_count"],
+      "overview": movie["overview"],
       "release_date": movie["release_date"],
     }
     for movie in raw_data

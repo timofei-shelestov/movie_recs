@@ -1,8 +1,8 @@
-class Vectorizer:
+class GenreVectorizer:
   def __init__(self, all_genres):
     self.all_genres = all_genres | None
 
-  def vectorize_one(self, movie_genres):
+  def genre_vectorize_one(self, movie_genres):
     vector = []
 
     for genre in self.all_genres:
@@ -13,9 +13,9 @@ class Vectorizer:
 
     return vector
 
-  def vectorize_many(self, movies_genres):
+  def genre_vectorize_many(self, movies_genres):
     feature_vector = []
     for movie_genres in movies_genres:
-      feature_vector.append(self.vectorize_one(movie_genres))
+      feature_vector.append(self.genre_vectorize_one(movie_genres))
 
     return feature_vector

@@ -6,6 +6,7 @@ class Movie(Model):
   title = fields.CharField(max_length=255, db_index=True)
   vote_average = fields.FloatField()
   vote_count = fields.IntField()
+  overview = fields.CharField(max_length=1000)
   release_date = fields.DatetimeField()
 
   class Meta:

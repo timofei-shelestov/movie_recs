@@ -13,7 +13,7 @@ class MovieOperations:
   async def get_all(self):
     conn = Tortoise.get_connection("default")
     return await conn.execute_query_dict(
-      "SELECT movie_id AS id, title, vote_average, vote_count, release_date, GROUP_CONCAT(genre_id) AS genre_ids FROM movies INNER JOIN movie_genre ON movies.id = movie_genre.movie_id GROUP BY movies.release_date"
+      "SELECT movie_id AS id, title, vote_average, vote_count, overview, release_date, GROUP_CONCAT(genre_id) AS genre_ids FROM movies INNER JOIN movie_genre ON movies.id = movie_genre.movie_id GROUP BY movies.release_date"
     )
 
   async def get_by_id(self, movie_id):
