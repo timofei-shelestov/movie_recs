@@ -1,12 +1,12 @@
 class GenreVectorizer:
   def __init__(self, all_genres):
-    self.all_genres = all_genres | None
+    self.all_genres = all_genres
 
   def genre_vectorize_one(self, movie_genres):
     vector = []
 
     for genre in self.all_genres:
-      if genre in movie_genres:
+      if genre in list(map(int(movie_genres))):
         vector.append(1)
       else:
         vector.append(0)

@@ -1,3 +1,4 @@
-from .vectorizer import GenreVectorizer
+from .genre_vectorizer import GenreVectorizer
+from .tfidf_vectorizer import TfidfVectorizer
 
-__all__ = ["GenreVectorizer"]
+__all__ = ["GenreVectorizer", "TfidfVectorizer"]
