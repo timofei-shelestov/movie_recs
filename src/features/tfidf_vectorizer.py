@@ -3,12 +3,13 @@ import math
 
 
 class TfidfVectorizer:
-  def __init__(self, docs):
+  def __init__(self):
     self.n_docs = 0
     self.vocab = {}
     self.docs_frequencies = {}
 
-  def fit(self, docs):
+  def fit(self, movies):
+    docs = [movie["overview"] for movie in movies]
     c = 0
     for doc in docs:
       for term in re.findall(r"\b\w+\b", doc):
@@ -25,7 +26,9 @@ class TfidfVectorizer:
 
       termInCurrentDoc = False
 
-  def transfrom(self, docs):
+  def transform(self, movies):
+    docs = [movie["overview"] for movie in movies]
+    self.n_docs = len(list(docs))
     tfidf_vec = []
 
     for doc in docs:
@@ -34,7 +37,7 @@ class TfidfVectorizer:
       for term in re.findall(r"\b\w+\b", doc):
         term = term.lower()
 
-        idf = self._calc_idf(len(list(docs)), term, self.docs_frequencies)
+        idf = self._calc_idf(term)
         tfidf = round(tf[term] * idf, 1)
         curr_vec.insert(self.vocab[term], tfidf)
 
@@ -44,13 +47,13 @@ class TfidfVectorizer:
 
   def _calc_tf(self, doc):
     tf = {}
-    for term in doc.split():
-      if term not in self.vocab:
+    for term in self.vocab:
+      if term not in tf:
         tf[term] = 1
       else:
         tf[term] = tf[term] + 1
 
     return tf
 
-  def _calc_idf(self, n_docs, term):
-    return math.log(n_docs / self.docs_frequencies[term])
+  def _calc_idf(self, term):
+    return math.log(self.n_docs / self.docs_frequencies[term])
