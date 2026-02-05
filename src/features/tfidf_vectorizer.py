@@ -32,14 +32,14 @@ class TfidfVectorizer:
     tfidf_vec = []
 
     for doc in docs:
-      curr_vec = []
       tf = self._calc_tf(doc)
+      curr_vec = [0] * len(self.vocab)
       for term in re.findall(r"\b\w+\b", doc):
-        term = term.lower()
+        term = term.lower().strip()
 
         idf = self._calc_idf(term)
         tfidf = round(tf[term] * idf, 1)
-        curr_vec.insert(self.vocab[term], tfidf)
+        curr_vec[self.vocab[term]] = tfidf
 
       tfidf_vec.append(curr_vec)
 
@@ -47,7 +47,8 @@ class TfidfVectorizer:
 
   def _calc_tf(self, doc):
     tf = {}
-    for term in self.vocab:
+    for term in re.findall(r"\b\w+\b", doc):
+      term = term.lower().strip()
       if term not in tf:
         tf[term] = 1
       else:
