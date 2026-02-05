@@ -10,6 +10,7 @@ class TfidfVectorizer:
 
   def fit(self, movies):
     docs = [movie["overview"] for movie in movies]
+    termInCurrentDoc = False
     c = 0
     for doc in docs:
       for term in re.findall(r"\b\w+\b", doc):
