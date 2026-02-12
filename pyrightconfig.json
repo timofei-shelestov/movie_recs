@@ -1,6 +1,6 @@
 {
-  "include": [
-    "src",
-  ],
-  "venv": ".venv"
+  "include": ["src"],
+  "venv": ".venv",
+
+  "typeCheckingMode": "standard",
 }

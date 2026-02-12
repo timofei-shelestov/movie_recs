@@ -14,7 +14,7 @@ class PopularityRecommender(BaseRecommender):
 
     return (C * m + vote_sum) / (C + movie["vote_count"])
 
-  def get_recommendation(self):
-    scored = [(movie["id"], self.score_movie(movie)) for movie in self.movies]
+  def get_recommendation(self, movies):
+    scored = [(movie["id"], self.score_movie(movie)) for movie in self.movies | movies]
 
     return scored

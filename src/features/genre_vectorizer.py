@@ -10,35 +10,28 @@ class GenreVectorizer:
     count = 0
 
     for movie in movies:
-      genre_ids = [int(x) for x in movie["genre_ids"].split(",")]
+      genre_ids = set(int(x) for x in movie["genre_ids"].split(","))
       for genre_id in genre_ids:
         if genre_id not in self.genre_to_index:
           self.genre_to_index[genre_id] = count
           count = count + 1
 
   def transform(self, movies):
-    feature_vec = []
-    for movie in movies:
-      temp_vec = []
-      genre_ids = [int(x) for x in movie["genre_ids"].split(",")]
-      for genre_id in self.genre_to_index:
-        if genre_id in genre_ids:
-          temp_vec.insert(self.genre_to_index[genre_id], 1)
-        else:
-          temp_vec.insert(self.genre_to_index[genre_id], 0)
+    feature_mtx = np.zeros((len(movies), len(self.genre_to_index)), dtype=np.uint32)
+    
+    for movie_idx, movie in enumerate(movies):  
+      genre_ids = set(int(x) for x in movie["genre_ids"].split(","))
+      for genre_id in genre_ids:
+        feature_mtx[movie_idx, self.genre_to_index[genre_id]] = 1
+        
 
-      feature_vec.append(temp_vec)
-
-    return np.array(feature_vec)
+    return feature_mtx
 
   def _vectorize_single_movie(self, movie):
-    movie_genres = movie["genre_ids"].split(",")
-    vector = []
+    genre_ids = set(int(x) for x in movie["genre_ids"].split(","))
+    vec = np.zeros((1, len(self.genre_to_index)), dtype=np.uint32)
 
-    for genre in self.all_genres:
-      if genre in list(map(int(movie_genres))):
-        vector.append(1)
-      else:
-        vector.append(0)
+    for genre_id in genre_ids:
+      vec[0, self.genre_to_index[genre_id]] = 1
 
-    return vector
+    return vec

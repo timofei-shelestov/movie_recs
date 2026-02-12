@@ -13,5 +13,5 @@ class BaseRecommender(ABC):
     pass
 
   @abstractmethod
-  def get_recommendation(self, movies, n):
+  def get_recommendation(self, movies) -> list[tuple]:
     pass
